@@ -16,6 +16,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.ArrayList;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -24,7 +25,7 @@ import javax.swing.JTextField;
 
 /**
  *
- * @author wolmir
+ * @author Claudivan
  */
 public class Servidor extends Thread implements Runnable  {
 //public class Servidor {
@@ -43,7 +44,7 @@ public class Servidor extends Thread implements Runnable  {
                     JTextField txtPorta = new JTextField("12345");
                     Object[] texts = {lblMessage, txtPorta};
                     JOptionPane.showMessageDialog(null, texts);
-//			criando um socket que fica escutando a porta 9090		
+ //			criando um socket que fica escutando a porta 9090		
                         ServerSocket s = new ServerSocket(12345);
             System.out.println("Porta 12345 aberta!");
 

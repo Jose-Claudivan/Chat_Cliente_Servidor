@@ -25,30 +25,39 @@ import java.lang.Thread;
 	
 //public class Cliente extends JFrame implements ActionListener, KeyListener {
 
-public class Cliente extends JFrame implements Runnable, ActionListener, KeyListener {
+//public class Cliente extends JFrame implements Runnable, ActionListener, KeyListener {
 //public class Cliente extends Thread implements ActionListener, KeyListener {
+public class Cliente extends Thread{
 //	Flag que indica quando se deve terminar a execução.
 	private static boolean done = false;
         /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-        private JTextArea texto;
-        private JTextField txtMsg;
-        private JButton btnSend;
-        private JButton btnSair;
-        private JLabel lblHistorico;
-        private JLabel lblMsg;
-        private JPanel pnlContent;
+        private static JTextArea texto;
+        private static JTextField txtMsg;
+        private static JButton btnSend;
+        private static JButton btnSair;
+        private static JLabel lblHistorico;
+        private static JLabel lblMsg;
+        private static JPanel pnlContent;
         //private Socket socket;
         //private OutputStream ou;
         //private Write ouw;
         //private BufferWriter bfw;
-        private JTextField txtIP;
-        private JTextField txtPorta;
-        private JTextField txtNome;
+        private static JTextField txtIP;
+        private static JTextField txtPorta;
+        private static JTextField txtNome;
                
                 
        	public static void main(String args[]) {
             
        		try {
+                    
+                    /*---------------------------------------*/
+            JLabel lblMessage = new JLabel("Verificar");
+            txtIP = new JTextField("127.0.0.1");
+            txtPorta = new JTextField("12345");
+            txtNome = new JTextField("Cliente");
+            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
+            JOptionPane.showMessageDialog(null, texts);
 //			Para se conectar a algum servidor, basta se criar um
 //			objeto da classe Socket. O primeiro parâmetro é o IP ou
 //			o endereço da máquina a qual se quer conectar e o
@@ -57,7 +66,6 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
 //			da aplicação ServidorDeChat. Nada impede a mudança
 //			desses valores, tentando estabelecer uma conexão com
 //			outras portas em outras máquinas.
-
 			Socket conexao = new Socket("localhost", 12345);
                         System.out.println("Usuario Conectado ao Servidor");
                         
@@ -74,19 +82,21 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
                            //  saida.println(tecla.nextLine());
                          //}
 //			enviar antes de tudo o nome do usuário
-			BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
+                        BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
 			System.out.print("Entre com o seu nome: ");
 			String meuNome = teclado.readLine();
 			saida.println(meuNome);
-                     
-                                    
+                        
+			
 //			Uma vez que tudo está pronto, antes de iniciar o loop
 //			principal, executar a thread de recepção de mensagens.
 			//Thread t = new Cliente(conexao);
-                        Thread t = new Thread();
+                       // t.start();
+                        Thread t = new Cliente(conexao);
+                        t.start();
+                       // Thread t = new Thread();
                         //t = new Cliente(conexao);
-			t.start();
-                        
+			
 //			loop principal: obtendo uma linha digitada no teclado e
 //			enviando-a para o servidor.
 			String linha;
@@ -112,13 +122,17 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
 
 	public Cliente(Socket s) {
 		conexao = s;
-                /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+                           
+        }
+                /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
         JLabel lblMessage = new JLabel("Verificar");
-        txtIP = new JTextField("127.0.0.1");
-        txtPorta = new JTextField("12345");
-        txtNome = new JTextField("Cliente");
-        Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
-        JOptionPane.showMessageDialog(null, texts);
+            txtIP = new JTextField("127.0.0.1");
+            txtPorta = new JTextField("12345");
+            txtNome = new JTextField("Cliente");
+            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
+            JOptionPane.showMessageDialog(null, texts);
+   
         pnlContent = new JPanel();
         texto = new JTextArea(10,20);
         texto.setEditable(false);
@@ -153,8 +167,9 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
-	}
+	}*/
 //	execução da thread
+        @Override
 	public void run() {
 		try {
 			BufferedReader entrada = new BufferedReader
@@ -185,6 +200,14 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
 //		sinaliza para o main que a conexão encerrou.
 		done = true;
 	}
+        
+       /* public void enviarMensagem(String msg){
+            
+        }
+        
+        public void sair(){
+            
+        }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -194,8 +217,9 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
             else
                 if(e.getActionCommand().equals(btnSair.getActionCommand()))
                     sair();
-        } catch (IOException e1) {
-            //
+        } catch (Exception e1) {
+            //Todo auto-generated catch block
+            e1.printStackTrace();
         }
 
     }
@@ -206,12 +230,19 @@ public class Cliente extends JFrame implements Runnable, ActionListener, KeyList
     }
 
     @Override
-    public void keyPressed(KeyEvent ke) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode()==KeyEvent.VK_ENTER){
+            try{
+                enviarMensagem(txtMsg.getText());
+            } catch(Exception e1){
+                //Todo auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent ke) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 }
