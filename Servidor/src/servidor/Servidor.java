@@ -27,16 +27,17 @@ import javax.swing.JTextField;
  *
  * @author Claudivan
  */
-public class Servidor extends Thread implements Runnable  {
-//public class Servidor {
+//public class Servidor extends Thread implements Runnable  {
+public class Servidor {
 
    public static void main(String args[]) {
 		
                 /***********************************/
                 String clientSentence;
-                String capitalized;
+
+               // String capitalized;
 //		instancia o vetor de clientes conectados
-		clientes = new Vector();
+//		clientes = new Vector();
 		try {
                     
                     /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
@@ -79,19 +80,18 @@ public class Servidor extends Thread implements Runnable  {
                                     /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
                                     clientSentence = inFromUsuario.readLine();
                                     /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+                                   //imprime mensagem do servidor no cliente
                                     outToClient.writeBytes(clientSentence + "\n");
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                   // capitalized = inFromUsuario.readLine();
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                   // System.out.println("From Client: " + capitalized);
+                                    //outToClient.writeBytes(clientSentence);
+                                    System.out.print("Cliente -> ");
                                     
-                                    
+                                                                     
                                     
                                 }
 
 //				cria uma nova thread para tratar essa conexão
-                                Thread t = new Servidor(conexao);
-				t.start();
+//                                Thread t = new Servidor(conexao);
+				//t.start();
 //				voltando ao loop, esperando mais alguém se conectar.
                                
 			}
@@ -104,37 +104,48 @@ public class Servidor extends Thread implements Runnable  {
 	}
 //	Parte que controla as conexões por meio de threads.
 //	Note que a instanciação está no main.
-	private static Vector clientes;
+	//private static Vector clientes;
 //	socket deste cliente
-	private Socket conexao;
+	//private Socket conexao;
 //	nome deste cliente
-	private String meuNome;
+	//private String meuNome;
 //	construtor que recebe o socket deste cliente
-	public Servidor(Socket s) {
-            conexao = s;
-	}
+	//public Servidor(Socket s) {
+     //       conexao = s;
+	//}
 //	execução da thread
-   @Override
-	public void run() {
+  // @Override
+	/*public void run() {
 		try {
 //			objetos que permitem controlar fluxo de comunicação
-			BufferedReader entrada = new BufferedReader(new
-					InputStreamReader(conexao.getInputStream()));
-			PrintStream saida = new
-			PrintStream(conexao.getOutputStream());
+			BufferedReader entrada = new BufferedReader
+					(new InputStreamReader(conexao.getInputStream()));
+			//PrintStream saida = new
+			//PrintStream(conexao.getOutputStream());
+                        /***********************************
+                      /*  String li;
+                        while(true){
+                            li = entrada.readLine();
+                            
+                            if (li == null){
+                                System.out.println("COnexao encerrada, nome do usuario");
+                                break;
+                            }
+                        }
 			
 //			primeiramente, espera-se pelo nome do cliente
-			meuNome = entrada.readLine();
+			
+                        
 			
 //			agora, verifica se string recebida é valida, pois
 //			sem a conexão foi interrompida, a string é null.
 //			Se isso ocorrer, deve-se terminar a execução.
-			if (meuNome == null) {return;}
+
 			
 //			Uma vez que se tem um cliente conectado e conhecido,
 //			coloca-se fluxo de saída para esse cliente no vetor de
 //			clientes conectados.
-			clientes.add(saida);
+			//clientes.add(saida);
 			
 //			clientes é objeto compartilhado por várias threads!
 //			De acordo com o manual da API, os métodos são
@@ -145,35 +156,15 @@ public class Servidor extends Thread implements Runnable  {
 //			cliente envie linha em branco.
 //			Verificar se linha é null (conexão interrompida)
 //			Se não for nula, pode-se compará-la com métodos string
-			String linha = entrada.readLine();
 			
-			while (linha != null && !(linha.trim().equals(""))) {
-//				reenvia a linha para todos os clientes conectados
-				sendToAll(saida, " disse: ", linha);
-
-//				espera por uma nova linha.
-				linha = entrada.readLine();
-			}
 //			Uma vez que o cliente enviou linha em branco, retira-se
 //			fluxo de saída do vetor de clientes e fecha-se conexão.
-			sendToAll(saida, " saiu ", "do chat!");
-			clientes.remove(saida);
-			conexao.close();
-		}
+			
+			//conexao.close();
+		//}
 		catch (IOException e) {
 //			Caso ocorra alguma excessão de E/S, mostre qual foi.
 			System.out.println("IOException: " + e);
 		}
-	}
-//	enviar uma mensagem para todos, menos para o próprio
-	public void sendToAll(PrintStream saida, String acao,
-			String linha) throws IOException {
-		Enumeration e = clientes.elements();
-		while (e.hasMoreElements()) {
-//			obtém o fluxo de saída de um dos clientes
-			PrintStream chat = (PrintStream) e.nextElement();
-//			envia para todos, menos para o próprio usuário
-			if (chat != saida) {chat.println(meuNome + acao + linha);}
-		}
-	}
+	}*/
 }

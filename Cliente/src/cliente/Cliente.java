@@ -48,6 +48,7 @@ public class Cliente extends Thread{
                
                 
        	public static void main(String args[]) {
+            String serverSentence;
             
        		try {
                     
@@ -70,39 +71,47 @@ public class Cliente extends Thread{
                         System.out.println("Usuario Conectado ao Servidor");
                         
                         ///////////////////////
-                        Scanner tecla = new Scanner(System.in);
+                        //Scanner tecla = new Scanner(System.in);
                         
 //		Basuma vez estabelecida a comunicação, deve-se obter os
 //			objetos que permitem controlar o fluxo de comunicação
 			PrintStream saida = new PrintStream(conexao.getOutputStream());
-                        ///////
-                       // System.out.println("Digite alguma mensagem");
-			 ///////////////
-                         //while(tecla.hasNextLine()){
-                           //  saida.println(tecla.nextLine());
-                         //}
+                                    
 //			enviar antes de tudo o nome do usuário
                         BufferedReader teclado = new BufferedReader(new InputStreamReader(System.in));
 			System.out.print("Entre com o seu nome: ");
 			String meuNome = teclado.readLine();
-			saida.println(meuNome);
-                        
+			//saida.println(meuNome);
+                        //TESTE
+                       /* Scanner sc = new Scanner(conexao.getInputStream());
+                        while(sc.hasNextLine()){
+                            System.out.println(sc.nextLine());
+                            BufferedReader inFromServer = new BufferedReader(
+                                new InputStreamReader(conexao.getInputStream()));
+                            BufferedReader inFromServ = new BufferedReader(
+                                new InputStreamReader(System.in));
+                            DataOutputStream outToServer = new DataOutputStream(
+                                conexao.getOutputStream());
+                            BufferedReader inFromServidor = new  BufferedReader(
+                                new InputStreamReader(conexao.getInputStream()));
+                            serverSentence = inFromServ.readLine();
+                            outToServer.writeBytes(serverSentence + "\n");
+                            System.out.println("Servidor ->");
+                        }*/
 			
 //			Uma vez que tudo está pronto, antes de iniciar o loop
 //			principal, executar a thread de recepção de mensagens.
-			//Thread t = new Cliente(conexao);
-                       // t.start();
-                        Thread t = new Cliente(conexao);
-                        t.start();
-                       // Thread t = new Thread();
-                        //t = new Cliente(conexao);
+                       Thread t = new Cliente(conexao);
+                       t.start();
+
 			
 //			loop principal: obtendo uma linha digitada no teclado e
 //			enviando-a para o servidor.
 			String linha;
 			while (true) {
                             /////////////////////////////////////
-				System.out.print("> " + meuNome +": ");
+				//System.out.print("> " + meuNome +": ");
+                                System.out.print(meuNome + "-> ");
 //                              ler a linha digitada no teclado
 				linha = teclado.readLine();
 //				antes de enviar, verifica se a conexão não foi fechada
@@ -114,6 +123,7 @@ public class Cliente extends Thread{
 		catch (IOException e) {
 //			Caso ocorra alguma excessão de E/S, mostre qual foi.
 			System.out.println("IOException: " + e);
+                        System.out.println("ERRO DE ENTRADA/SAIDA NO CLIENTE");
 		}
 	}
 //	parte que controla a recepção de mensagens deste cliente
@@ -168,7 +178,7 @@ public class Cliente extends Thread{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
 	}*/
-//	execução da thread
+//	execução da thread Entrada das mensagens do servidor
         @Override
 	public void run() {
 		try {
@@ -186,9 +196,13 @@ public class Cliente extends Thread{
 					break;
 				}
 //				caso a linha não seja nula, deve-se imprimi-la
+                               
 				System.out.println();
+                                System.out.print("Server -> ");
 				System.out.println(linha);
-				System.out.print("...> ");
+                                
+
+				
 			}
 			
 
