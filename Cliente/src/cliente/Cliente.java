@@ -27,7 +27,7 @@ import java.lang.Thread;
 
 //public class Cliente extends JFrame implements Runnable, ActionListener, KeyListener {
 //public class Cliente extends Thread implements ActionListener, KeyListener {
-public class Cliente extends Thread{
+public class Cliente{
 //	Flag que indica quando se deve terminar a execução.
 	private static boolean done = false;
         /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
@@ -101,8 +101,10 @@ public class Cliente extends Thread{
 			
 //			Uma vez que tudo está pronto, antes de iniciar o loop
 //			principal, executar a thread de recepção de mensagens.
-                       Thread t = new Cliente(conexao);
-                       t.start();
+                       Thread t1 = new Thread(new Cliente(conexao).new RunnableImpl()); 
+                       t1.start();
+                       //Thread t = new Cliente(conexao);
+                       //t.start();
 
 			
 //			loop principal: obtendo uma linha digitada no teclado e
@@ -123,7 +125,7 @@ public class Cliente extends Thread{
 		catch (IOException e) {
 //			Caso ocorra alguma excessão de E/S, mostre qual foi.
 			System.out.println("IOException: " + e);
-                        System.out.println("ERRO DE ENTRADA/SAIDA NO CLIENTE");
+            System.out.println("ERRO DE ENTRADA/SAIDA NO CLIENTE");
 		}
 	}
 //	parte que controla a recepção de mensagens deste cliente
@@ -134,6 +136,43 @@ public class Cliente extends Thread{
 		conexao = s;
                            
         }
+
+
+
+    private class RunnableImpl implements Runnable { 
+  
+        public void run() 
+        { 
+            try {
+                BufferedReader entrada = new BufferedReader
+                (new InputStreamReader(conexao.getInputStream()));
+                String linha;
+                while (true) {
+        //			pega o que o servidor enviou
+                    linha = entrada.readLine();
+        //			verifica se é uma linha válida. Pode ser que a conexão
+        //			foi interrompida. Neste caso, a linha é null. Se isso
+        //			ocorrer, termina-se a execução saindo com break
+                    if (linha == null) {
+                        System.out.println("Conexão encerrada!");
+                        break;
+                    }
+        //			caso a linha não seja nula, deve-se imprimi-la
+                                       
+                    System.out.println();
+                    System.out.print("Server -> ");
+                    System.out.println(linha);
+                                        
+                }
+            }
+            catch (IOException e) {
+        //		caso ocorra alguma exceção de E/S, mostre qual foi.
+                 System.out.println("IOException: " + e);
+            }
+        //	sinaliza para o main que a conexão encerrou.
+            done = true;
+        } 
+    } 
                 /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
         JLabel lblMessage = new JLabel("Verificar");
@@ -179,41 +218,7 @@ public class Cliente extends Thread{
                 
 	}*/
 //	execução da thread Entrada das mensagens do servidor
-        @Override
-	public void run() {
-		try {
-			BufferedReader entrada = new BufferedReader
-			(new InputStreamReader(conexao.getInputStream()));
-			String linha;
-			while (true) {
-//				pega o que o servidor enviou
-				linha = entrada.readLine();
-//				verifica se é uma linha válida. Pode ser que a conexão
-//				foi interrompida. Neste caso, a linha é null. Se isso
-//				ocorrer, termina-se a execução saindo com break
-				if (linha == null) {
-					System.out.println("Conexão encerrada!");
-					break;
-				}
-//				caso a linha não seja nula, deve-se imprimi-la
-                               
-				System.out.println();
-                                System.out.print("Server -> ");
-				System.out.println(linha);
-                                
-
-				
-			}
-			
-
-		}
-		catch (IOException e) {
-//			caso ocorra alguma exceção de E/S, mostre qual foi.
-			System.out.println("IOException: " + e);
-		}
-//		sinaliza para o main que a conexão encerrou.
-		done = true;
-	}
+  
         
        /* public void enviarMensagem(String msg){
             
@@ -259,4 +264,6 @@ public class Cliente extends Thread{
     public void keyReleased(KeyEvent ke) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }*/
+
+    
 }
