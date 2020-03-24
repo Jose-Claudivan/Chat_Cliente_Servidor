@@ -23,14 +23,12 @@ import javax.swing.*;
 import java.lang.Thread;
 
 	
-//public class Cliente extends JFrame implements ActionListener, KeyListener {
-
-//public class Cliente extends JFrame implements Runnable, ActionListener, KeyListener {
-//public class Cliente extends Thread implements ActionListener, KeyListener {
-public class Cliente{
+public class Cliente extends JFrame implements ActionListener, KeyListener{
+//public class Cliente{
 //	Flag que indica quando se deve terminar a execução.
 	private static boolean done = false;
         /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+        private static final long serialVersionUID = 1L;
         private static JTextArea texto;
         private static JTextField txtMsg;
         private static JButton btnSend;
@@ -38,27 +36,30 @@ public class Cliente{
         private static JLabel lblHistorico;
         private static JLabel lblMsg;
         private static JPanel pnlContent;
-        //private Socket socket;
-        //private OutputStream ou;
-        //private Write ouw;
-        //private BufferWriter bfw;
+        private Socket socket;
+        private OutputStream ou;
+        private Writer ouw;
+        private BufferedWriter bfw;
         private static JTextField txtIP;
         private static JTextField txtPorta;
         private static JTextField txtNome;
-               
+           
                 
-       	public static void main(String args[]) {
+       	public static void main(String args[]) throws IOException {
+            Cliente app = new Cliente();
+            app.conectar();
+            app.escutar();
             String serverSentence;
             
        		try {
                     
                     /*---------------------------------------*/
-            JLabel lblMessage = new JLabel("Verificar");
+           /* JLabel lblMessage = new JLabel("Verificar");
             txtIP = new JTextField("127.0.0.1");
             txtPorta = new JTextField("12345");
             txtNome = new JTextField("Cliente");
             Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
-            JOptionPane.showMessageDialog(null, texts);
+            JOptionPane.showMessageDialog(null, texts);*/
 //			Para se conectar a algum servidor, basta se criar um
 //			objeto da classe Socket. O primeiro parâmetro é o IP ou
 //			o endereço da máquina a qual se quer conectar e o
@@ -68,8 +69,8 @@ public class Cliente{
 //			desses valores, tentando estabelecer uma conexão com
 //			outras portas em outras máquinas.
 			Socket conexao = new Socket("localhost", 12345);
-                        System.out.println("Usuario Conectado ao Servidor");
-                        
+                       System.out.println("Usuario Conectado ao Servidor");
+                  
                         ///////////////////////
                         //Scanner tecla = new Scanner(System.in);
                         
@@ -136,11 +137,106 @@ public class Cliente{
 		conexao = s;
                            
         }
-
+        //21/03
+        public Cliente() throws IOException{
+            JLabel lblMessage = new JLabel("Verificar");
+            txtIP = new JTextField("127.0.0.1");
+            txtPorta = new JTextField("12345");
+            txtNome = new JTextField("Cliente");
+            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
+            JOptionPane.showMessageDialog(null, texts);
+   
+        pnlContent = new JPanel();
+        texto = new JTextArea(10,20);
+        texto.setEditable(false);
+        texto.setBackground(new Color(240,240,240));
+        txtMsg = new JTextField(20);
+        lblHistorico = new JLabel("Histórico");
+        lblMsg = new JLabel("Mensagem");
+        btnSend = new JButton("Enviar");
+        btnSend.setToolTipText("Enviar mensagem");
+        btnSair = new JButton("Sair");
+        btnSair.setToolTipText("Sair do Chat");
+        btnSend.addActionListener(this);
+        btnSair.addActionListener(this);
+        btnSend.addKeyListener(this);
+        txtMsg.addKeyListener(this);
+        JScrollPane scroll = new JScrollPane(texto);
+        texto.setLineWrap(true);
+        pnlContent.add(lblHistorico);
+        pnlContent.add(scroll);
+        pnlContent.add(lblMsg);
+        pnlContent.add(txtMsg);
+        pnlContent.add(btnSair);
+        pnlContent.add(btnSend);
+        pnlContent.setBackground(Color.LIGHT_GRAY);
+        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        setTitle(txtNome.getText());
+        setContentPane(pnlContent);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setSize(250, 300);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+                
+            
+        }
+        //22/03
+        public void conectar() throws IOException{
+            socket = new Socket(txtIP.getText(),Integer.parseInt(txtPorta.getText()));
+            ou = socket.getOutputStream();
+            ouw = new OutputStreamWriter(ou);
+            bfw = new BufferedWriter(ouw);
+            bfw.write(txtNome.getText()+"\r\n");
+            bfw.flush();
+        }
+        
+        //22/03
+        public void enviarMensagem(String msg) throws IOException{
+            if(msg.equals("Sair")){
+                bfw.write("Desconectado \r\n");
+                texto.append("Desconectado \r\n");
+            }
+            else{
+                bfw.write(msg+"\r\n");
+                texto.append(txtNome.getText()+"diz -> " + txtMsg.getText()+"\r\n");
+            }
+            bfw.flush();
+            txtMsg.setText("");
+        }
+        
+        //22/03
+        public void escutar() throws IOException{
+            
+            InputStream in = socket.getInputStream();
+            InputStreamReader inr = new InputStreamReader(in);
+            BufferedReader bfr = new BufferedReader(inr);
+            String msg = "";
+            
+            while(!"Sair".equalsIgnoreCase(msg))
+                
+                if(bfr.ready()){
+                    msg = bfr.readLine();
+                    if(msg.equals("Sair"))
+                        texto.append("Servidor caiu! \r\n");
+                    else
+                        texto.append(msg+"\r\n");
+                }
+        }
+        
+        public void sair() throws IOException{
+            enviarMensagem("Sair");
+            bfw.close();
+            ouw.close();
+            ou.close();
+            socket.close();
+        }
 
 
     private class RunnableImpl implements Runnable { 
   
+        @Override
         public void run() 
         { 
             try {
@@ -154,16 +250,19 @@ public class Cliente{
         //			foi interrompida. Neste caso, a linha é null. Se isso
         //			ocorrer, termina-se a execução saindo com break
                     if (linha == null) {
-                        System.out.println("Conexão encerrada!");
-                        break;
+                    
+                      System.out.println("Conexão encerrada!");
+                      break;
                     }
-        //			caso a linha não seja nula, deve-se imprimi-la
-                                       
+                    
+                else {
                     System.out.println();
                     System.out.print("Server -> ");
                     System.out.println(linha);
                                         
+                
                 }
+            }
             }
             catch (IOException e) {
         //		caso ocorra alguma exceção de E/S, mostre qual foi.
@@ -218,16 +317,8 @@ public class Cliente{
                 
 	}*/
 //	execução da thread Entrada das mensagens do servidor
-  
         
-       /* public void enviarMensagem(String msg){
-            
-        }
-        
-        public void sair(){
-            
-        }
-
+         
     @Override
     public void actionPerformed(ActionEvent e) {
         try{
@@ -244,8 +335,8 @@ public class Cliente{
     }
 
     @Override
-    public void keyTyped(KeyEvent ke) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void keyTyped(KeyEvent e) {
+    //todo auto-generated method block
     }
 
     @Override
@@ -261,9 +352,9 @@ public class Cliente{
     }
 
     @Override
-    public void keyReleased(KeyEvent ke) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    public void keyReleased(KeyEvent e) {
+        //todo auto-generated method block
+    }
 
     
 }
