@@ -12,14 +12,17 @@
 package servidor;
 
 
+import java.awt.Color;
+import java.awt.Font;
 import java.io.*;
 import java.net.*;
-import java.util.*;
-import java.util.ArrayList;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.*;
+import java.lang.Thread;
 
 
 
@@ -29,17 +32,49 @@ import javax.swing.JTextField;
  */
 //public class Servidor extends Thread implements Runnable  {
 public class Servidor {
-
-   public static void main(String args[]) {
+        ///////////////02/04/2020//////////////
+   /* private static boolean done = false;
+    
+    private static final long serialVersionUID = 1L;
+    private JTextArea texto;
+    private JTextField txtMsg;
+    private JButton btnSend;
+    private JButton btnSair;
+    private JLabel lblHistorico;
+    private JLabel lblMsg;
+    private JPanel pnlContent;
+    private Socket socket;
+    private OutputStream ou;
+    private Writer ouw;
+    private BufferedWriter bfw;
+    private JTextField txtIP;
+    private JTextField txtPorta;
+    private JTextField txtNome;*/
+    private static JLabel icon;
+    
+    
+   public static void main(String args[]) throws IOException {
 		
                 /***********************************/
+                
+                //Servidor app = new Servidor();
+               // app.conectar();
+               // app.escutar();
                 String clientSentence;
+                
 
                // String capitalized;
 //		instancia o vetor de clientes conectados
 //		clientes = new Vector();
 		try {
-                    
+                    //02-04-2020 -> teste icone
+                    ImageIcon imagem = new ImageIcon(Servidor.class.getResource("heart_icon.png"));
+                    JOptionPane.showMessageDialog(
+                    null,
+                    "Olá",
+                    "Olá", JOptionPane.INFORMATION_MESSAGE,
+                    imagem);
+                                      
                     /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
                     JLabel lblMessage = new JLabel("PORTA DO SERVIDOR: ");
                     JTextField txtPorta = new JTextField("12345");
@@ -102,69 +137,6 @@ public class Servidor {
 		}
 
 	}
-//	Parte que controla as conexões por meio de threads.
-//	Note que a instanciação está no main.
-	//private static Vector clientes;
-//	socket deste cliente
-	//private Socket conexao;
-//	nome deste cliente
-	//private String meuNome;
-//	construtor que recebe o socket deste cliente
-	//public Servidor(Socket s) {
-     //       conexao = s;
-	//}
-//	execução da thread
-  // @Override
-	/*public void run() {
-		try {
-//			objetos que permitem controlar fluxo de comunicação
-			BufferedReader entrada = new BufferedReader
-					(new InputStreamReader(conexao.getInputStream()));
-			//PrintStream saida = new
-			//PrintStream(conexao.getOutputStream());
-                        /***********************************
-                      /*  String li;
-                        while(true){
-                            li = entrada.readLine();
-                            
-                            if (li == null){
-                                System.out.println("COnexao encerrada, nome do usuario");
-                                break;
-                            }
-                        }
-			
-//			primeiramente, espera-se pelo nome do cliente
-			
-                        
-			
-//			agora, verifica se string recebida é valida, pois
-//			sem a conexão foi interrompida, a string é null.
-//			Se isso ocorrer, deve-se terminar a execução.
 
-			
-//			Uma vez que se tem um cliente conectado e conhecido,
-//			coloca-se fluxo de saída para esse cliente no vetor de
-//			clientes conectados.
-			//clientes.add(saida);
-			
-//			clientes é objeto compartilhado por várias threads!
-//			De acordo com o manual da API, os métodos são
-//			sincronizados. Portanto, não há problemas de acessos
-//			simultâneos.
-//			Loop principal: esperando por alguma string do cliente.
-//			Quando recebe, envia a todos os conectados até que o
-//			cliente envie linha em branco.
-//			Verificar se linha é null (conexão interrompida)
-//			Se não for nula, pode-se compará-la com métodos string
-			
-//			Uma vez que o cliente enviou linha em branco, retira-se
-//			fluxo de saída do vetor de clientes e fecha-se conexão.
-			
-			//conexao.close();
-		//}
-		catch (IOException e) {
-//			Caso ocorra alguma excessão de E/S, mostre qual foi.
-			System.out.println("IOException: " + e);
-		}
-	}*/
+   
 }

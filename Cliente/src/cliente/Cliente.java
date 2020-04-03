@@ -12,6 +12,7 @@
 package cliente;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -52,14 +53,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             String serverSentence;
             
        		try {
-                    
-                    /*---------------------------------------*/
-           /* JLabel lblMessage = new JLabel("Verificar");
-            txtIP = new JTextField("127.0.0.1");
-            txtPorta = new JTextField("12345");
-            txtNome = new JTextField("Cliente");
-            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
-            JOptionPane.showMessageDialog(null, texts);*/
+                
 //			Para se conectar a algum servidor, basta se criar um
 //			objeto da classe Socket. O primeiro parâmetro é o IP ou
 //			o endereço da máquina a qual se quer conectar e o
@@ -71,9 +65,6 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 			Socket conexao = new Socket("localhost", 12345);
                        System.out.println("Usuario Conectado ao Servidor");
                   
-                        ///////////////////////
-                        //Scanner tecla = new Scanner(System.in);
-                        
 //		Basuma vez estabelecida a comunicação, deve-se obter os
 //			objetos que permitem controlar o fluxo de comunicação
 			PrintStream saida = new PrintStream(conexao.getOutputStream());
@@ -272,50 +263,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             done = true;
         } 
     } 
-                /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-        JLabel lblMessage = new JLabel("Verificar");
-            txtIP = new JTextField("127.0.0.1");
-            txtPorta = new JTextField("12345");
-            txtNome = new JTextField("Cliente");
-            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
-            JOptionPane.showMessageDialog(null, texts);
-   
-        pnlContent = new JPanel();
-        texto = new JTextArea(10,20);
-        texto.setEditable(false);
-        texto.setBackground(new Color(240,240,240));
-        txtMsg = new JTextField(20);
-        lblHistorico = new JLabel("Histórico");
-        lblMsg = new JLabel("Mensagem");
-        btnSend = new JButton("Enviar");
-        btnSend.setToolTipText("Enviar mensagem");
-        btnSair = new JButton("Sair");
-        btnSair.setToolTipText("Sair do Chat");
-        btnSend.addActionListener(this);
-        btnSair.addActionListener(this);
-        btnSend.addKeyListener(this);
-        txtMsg.addKeyListener(this);
-        JScrollPane scroll = new JScrollPane(texto);
-        texto.setLineWrap(true);
-        pnlContent.add(lblHistorico);
-        pnlContent.add(scroll);
-        pnlContent.add(lblMsg);
-        pnlContent.add(txtMsg);
-        pnlContent.add(btnSair);
-        pnlContent.add(btnSend);
-        pnlContent.setBackground(Color.LIGHT_GRAY);
-        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
-        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
-        setTitle(txtNome.getText());
-        setContentPane(pnlContent);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setSize(250, 300);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-                
-	}*/
+       
 //	execução da thread Entrada das mensagens do servidor
         
          
@@ -355,6 +303,8 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
     public void keyReleased(KeyEvent e) {
         //todo auto-generated method block
     }
+    
+    
 
     
 }
