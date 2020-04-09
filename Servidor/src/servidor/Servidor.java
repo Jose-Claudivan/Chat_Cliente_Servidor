@@ -31,9 +31,10 @@ import java.lang.Thread;
  * @author Claudivan
  */
 //public class Servidor extends Thread implements Runnable  {
+//public class Servidor extends JFrame implements ActionListener, KeyListener{
 public class Servidor {
-        ///////////////02/04/2020//////////////
-   /* private static boolean done = false;
+        ///////////////07/04/2020//////////////
+    private static boolean done = false;
     
     private static final long serialVersionUID = 1L;
     private JTextArea texto;
@@ -49,40 +50,28 @@ public class Servidor {
     private BufferedWriter bfw;
     private JTextField txtIP;
     private JTextField txtPorta;
-    private JTextField txtNome;*/
+    private JTextField txtNome;
     private static JLabel icon;
     
     
    public static void main(String args[]) throws IOException {
-		
-                /***********************************/
-                
-                //Servidor app = new Servidor();
-               // app.conectar();
-               // app.escutar();
+		                          
                 String clientSentence;
                 
 
                // String capitalized;
 //		instancia o vetor de clientes conectados
 //		clientes = new Vector();
-		try {
-                    //02-04-2020 -> teste icone
-                    ImageIcon imagem = new ImageIcon(Servidor.class.getResource("heart_icon.png"));
-                    JOptionPane.showMessageDialog(
-                    null,
-                    "Olá",
-                    "Olá", JOptionPane.INFORMATION_MESSAGE,
-                    imagem);
-                                      
-                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
+	  	try {
+                                            
+                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
                     JLabel lblMessage = new JLabel("PORTA DO SERVIDOR: ");
                     JTextField txtPorta = new JTextField("12345");
                     Object[] texts = {lblMessage, txtPorta};
-                    JOptionPane.showMessageDialog(null, texts);
+                    JOptionPane.showMessageDialog(null, texts);*/
  //			criando um socket que fica escutando a porta 9090		
                         ServerSocket s = new ServerSocket(12345);
-            System.out.println("Porta 12345 aberta!");
+                        System.out.println("Porta 12345 aberta!");
 
 			
 //			Loop principal.
@@ -94,49 +83,196 @@ public class Servidor {
 //				objeto da classe Socket, que é porta da comunicação.
 				System.out.print("Esperando alguem se conectar...\n");
 				Socket conexao = s.accept();
-                                    //conexao.getInetAddress().getHostAddress();
-				System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
-                                 ////////////
-                                Scanner scan = new Scanner(conexao.getInputStream());
-                                while(scan.hasNextLine()){
-                                    System.out.println(scan.nextLine());
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                   BufferedReader inFromClient = new BufferedReader(
-                                        new InputStreamReader(conexao.getInputStream()));
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                    BufferedReader inFromUsuario = new BufferedReader(
-                                        new InputStreamReader(System.in));
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                    DataOutputStream outToClient = new DataOutputStream(
-                                        conexao.getOutputStream());
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                    BufferedReader inFromCliente = new BufferedReader(
-                                        new InputStreamReader(conexao.getInputStream()));
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                    clientSentence = inFromUsuario.readLine();
-                                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
-                                   //imprime mensagem do servidor no cliente
-                                    outToClient.writeBytes(clientSentence + "\n");
-                                    //outToClient.writeBytes(clientSentence);
-                                    System.out.print("Cliente -> ");
-                                    
-                                                                     
-                                    
+                                
+             			//System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
+                                    Servidor app = new Servidor();
+                                    app.enviarMsg(conexao);
+                                  //  app.conectar();
+                                   //  app.escutar();
+                                
+                                 //EMOJI/////                                                                                              if (clientSentence.equals("<3")){
+                                   /* ImageIcon imagem = new ImageIcon(Servidor.class.getResource("heart_icon.png"));
+                                    JOptionPane.showMessageDialog(
+                                    null,
+                                   "Love",
+                                   "Love", JOptionPane.INFORMATION_MESSAGE,
+                                    imagem);
+                                        
+                                    }*/
+                                   
                                 }
-
-//				cria uma nova thread para tratar essa conexão
-//                                Thread t = new Servidor(conexao);
-				//t.start();
-//				voltando ao loop, esperando mais alguém se conectar.
                                
-			}
-		}
-		catch (IOException e) {
+		  	}
+		//}
+	  	catch (IOException e) {
 //			caso ocorra alguma excessão de E/S, mostre qual foi.
-			System.out.println("IOException: " + e);
-		}
+		  	System.out.println("IOException: " + e);
+		  }
 
-	}
+	  }
+   
+ //  public Socket conexao;
+   public String clientSentence;
+
+   public void enviarMsg(Socket conexao) throws IOException{
+       
+       Scanner scan = new Scanner(conexao.getInputStream());
+       while(scan.hasNextLine()){
+              System.out.println(scan.nextLine());
+       //Ler a mensagem do cliente para o servidor
+          BufferedReader inFromUsuario = new BufferedReader(
+             new InputStreamReader(System.in));
+       //define as mensagem para um odjeto de saida
+         DataOutputStream outToClient = new DataOutputStream(
+             conexao.getOutputStream());
+         clientSentence = inFromUsuario.readLine();
+         //imprime mensagem do cliente no servidor
+         outToClient.writeBytes(clientSentence + "\n");
+              System.out.print("Cliente -> ");
+       }
+    
+   }
+
+        //22/03
+     /*   public void conectar() throws IOException{
+            //System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
+            
+            socket = new Socket(txtIP.getText(),Integer.parseInt(txtPorta.getText()));
+            ou = socket.getOutputStream();
+            ouw = new OutputStreamWriter(ou);
+            bfw = new BufferedWriter(ouw);
+            bfw.write(txtNome.getText()+"\r\n");
+            bfw.flush();
+        }*/
+   
+   ////07-04-2020/////////
+ /*  public Servidor(){
+       JLabel lblMessage = new JLabel("Verificado");
+            txtIP = new JTextField("127.0.0.1");
+            txtPorta = new JTextField("12345");
+            txtNome = new JTextField("Servidor");
+            Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
+            JOptionPane.showMessageDialog(null, texts);
+   
+        pnlContent = new JPanel();
+        texto = new JTextArea(10,20);
+        texto.setEditable(false);
+        texto.setBackground(new Color(240,240,240));
+        txtMsg = new JTextField(20);
+        lblHistorico = new JLabel("Histórico");
+        lblMsg = new JLabel("Mensagem");
+        btnSend = new JButton("Enviar");
+        btnSend.setToolTipText("Enviar mensagem");
+        btnSair = new JButton("Sair");
+        btnSair.setToolTipText("Sair do Chat");
+        btnSend.addActionListener(this);
+        btnSair.addActionListener(this);
+        btnSend.addKeyListener(this);
+        txtMsg.addKeyListener(this);
+        JScrollPane scroll = new JScrollPane(texto);
+        texto.setLineWrap(true);
+        pnlContent.add(lblHistorico);
+        pnlContent.add(scroll);
+        pnlContent.add(lblMsg);
+        pnlContent.add(txtMsg);
+        pnlContent.add(btnSair);
+        pnlContent.add(btnSend);
+        pnlContent.setBackground(Color.LIGHT_GRAY);
+        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        setTitle(txtNome.getText());
+        setContentPane(pnlContent);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setSize(250, 300);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+                
+            
+        }
+ 
+        
+        //22/03
+        public void enviarMensagem(String msg) throws IOException{
+            if(msg.equals("Sair")){
+                bfw.write("Desconectado \r\n");
+                texto.append("Desconectado \r\n");
+            }
+            else{
+                bfw.write(msg+"\r\n");
+                texto.append(txtNome.getText()+"diz -> " + txtMsg.getText()+"\r\n");
+            }
+            bfw.flush();
+            txtMsg.setText("");
+        }
+        
+        //22/03
+        public void escutar() throws IOException{
+            
+            InputStream in = socket.getInputStream();
+            InputStreamReader inr = new InputStreamReader(in);
+            BufferedReader bfr = new BufferedReader(inr);
+            String msg = "";
+            
+            while(!"Sair".equalsIgnoreCase(msg))
+                
+                if(bfr.ready()){
+                    msg = bfr.readLine();
+                    if(msg.equals("Sair"))
+                        texto.append("Servidor caiu! \r\n");
+                    else
+                        texto.append(msg+"\r\n");
+                }
+        }
+        
+        public void sair() throws IOException{
+            enviarMensagem("Sair");
+            bfw.close();
+            ouw.close();
+            ou.close();
+            socket.close();
+        }
 
    
+   
+   
+       
+   
+    @Override
+    public void actionPerformed(ActionEvent e) {
+    try{
+            if(e.getActionCommand().equals(btnSend.getActionCommand()))
+                enviarMensagem(txtMsg.getText());
+            else
+                if(e.getActionCommand().equals(btnSair.getActionCommand()))
+                    sair();
+        } catch (Exception e1) {
+            //Todo auto-generated catch block
+            e1.printStackTrace();
+        }  
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //todo auto-generated method block
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+            if(e.getKeyCode()==KeyEvent.VK_ENTER){
+            try{
+                enviarMensagem(txtMsg.getText());
+            } catch(Exception e1){
+                //Todo auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
+    }
+
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        //todo auto-generated method block
+    }*/
+
 }

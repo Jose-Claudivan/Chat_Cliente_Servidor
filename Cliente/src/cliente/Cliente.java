@@ -74,23 +74,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 			System.out.print("Entre com o seu nome: ");
 			String meuNome = teclado.readLine();
 			//saida.println(meuNome);
-                        //TESTE
-                       /* Scanner sc = new Scanner(conexao.getInputStream());
-                        while(sc.hasNextLine()){
-                            System.out.println(sc.nextLine());
-                            BufferedReader inFromServer = new BufferedReader(
-                                new InputStreamReader(conexao.getInputStream()));
-                            BufferedReader inFromServ = new BufferedReader(
-                                new InputStreamReader(System.in));
-                            DataOutputStream outToServer = new DataOutputStream(
-                                conexao.getOutputStream());
-                            BufferedReader inFromServidor = new  BufferedReader(
-                                new InputStreamReader(conexao.getInputStream()));
-                            serverSentence = inFromServ.readLine();
-                            outToServer.writeBytes(serverSentence + "\n");
-                            System.out.println("Servidor ->");
-                        }*/
-			
+                                        		
 //			Uma vez que tudo está pronto, antes de iniciar o loop
 //			principal, executar a thread de recepção de mensagens.
                        Thread t1 = new Thread(new Cliente(conexao).new RunnableImpl()); 
@@ -138,10 +122,10 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             JOptionPane.showMessageDialog(null, texts);
    
         pnlContent = new JPanel();
-        texto = new JTextArea(10,20);
+        texto = new JTextArea(15,30);
         texto.setEditable(false);
-        texto.setBackground(new Color(240,240,240));
-        txtMsg = new JTextField(20);
+        texto.setBackground(new Color(238,233,233));
+        txtMsg = new JTextField(30);
         lblHistorico = new JLabel("Histórico");
         lblMsg = new JLabel("Mensagem");
         btnSend = new JButton("Enviar");
@@ -167,14 +151,15 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         setContentPane(pnlContent);
         setLocationRelativeTo(null);
         setResizable(false);
-        setSize(250, 300);
+        setSize(350, 400);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
             
         }
-        //22/03
+        //22/03////Trata a conexao do cliente com o servidor
         public void conectar() throws IOException{
+            //passa as informações necessarias para socket para realixao a conexao
             socket = new Socket(txtIP.getText(),Integer.parseInt(txtPorta.getText()));
             ou = socket.getOutputStream();
             ouw = new OutputStreamWriter(ou);
@@ -191,7 +176,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             }
             else{
                 bfw.write(msg+"\r\n");
-                texto.append(txtNome.getText()+"diz -> " + txtMsg.getText()+"\r\n");
+                texto.append(txtNome.getText()+" diz -> " + txtMsg.getText()+"\r\n");
             }
             bfw.flush();
             txtMsg.setText("");
@@ -212,7 +197,9 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
                     if(msg.equals("Sair"))
                         texto.append("Servidor caiu! \r\n");
                     else
-                        texto.append(msg+"\r\n");
+                        
+                        texto.append("Servidor diz -> " + msg+"\r\n");
+                        //texto.append(msg+"\r\n");
                 }
         }
         
@@ -235,7 +222,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
                 (new InputStreamReader(conexao.getInputStream()));
                 String linha;
                 while (true) {
-        //			pega o que o servidor enviou
+        //          pega o que o servidor enviou
                     linha = entrada.readLine();
         //			verifica se é uma linha válida. Pode ser que a conexão
         //			foi interrompida. Neste caso, a linha é null. Se isso
