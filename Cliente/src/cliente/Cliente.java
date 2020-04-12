@@ -145,8 +145,8 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         pnlContent.add(btnSair);
         pnlContent.add(btnSend);
         pnlContent.setBackground(Color.LIGHT_GRAY);
-        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
-        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        texto.setBorder(BorderFactory.createEtchedBorder(Color.GREEN, Color.GREEN));
+        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.GREEN, Color.GREEN));
         setTitle(txtNome.getText());
         setContentPane(pnlContent);
         setLocationRelativeTo(null);

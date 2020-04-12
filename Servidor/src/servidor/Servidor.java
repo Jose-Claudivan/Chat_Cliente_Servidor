@@ -52,24 +52,15 @@ public class Servidor {
     private JTextField txtPorta;
     private JTextField txtNome;
     private static JLabel icon;
+    private BufferedReader bfr;
     
     
    public static void main(String args[]) throws IOException {
 		                          
                 String clientSentence;
-                
-
-               // String capitalized;
-//		instancia o vetor de clientes conectados
-//		clientes = new Vector();
+      
 	  	try {
-                                            
-                    /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-                    JLabel lblMessage = new JLabel("PORTA DO SERVIDOR: ");
-                    JTextField txtPorta = new JTextField("12345");
-                    Object[] texts = {lblMessage, txtPorta};
-                    JOptionPane.showMessageDialog(null, texts);*/
- //			criando um socket que fica escutando a porta 9090		
+     //			criando um socket que fica escutando a porta 9090		
                         ServerSocket s = new ServerSocket(12345);
                         System.out.println("Porta 12345 aberta!");
 
@@ -115,20 +106,22 @@ public class Servidor {
    public String clientSentence;
 
    public void enviarMsg(Socket conexao) throws IOException{
-       
+      
        Scanner scan = new Scanner(conexao.getInputStream());
-       while(scan.hasNextLine()){
+        while(scan.hasNextLine()){
               System.out.println(scan.nextLine());
        //Ler a mensagem do cliente para o servidor
           BufferedReader inFromUsuario = new BufferedReader(
              new InputStreamReader(System.in));
-       //define as mensagem para um odjeto de saida
+     
+      //define as mensagem para um odjeto de saida
          DataOutputStream outToClient = new DataOutputStream(
              conexao.getOutputStream());
          clientSentence = inFromUsuario.readLine();
          //imprime mensagem do cliente no servidor
          outToClient.writeBytes(clientSentence + "\n");
               System.out.print("Cliente -> ");
+             
        }
     
    }
@@ -146,7 +139,7 @@ public class Servidor {
         }*/
    
    ////07-04-2020/////////
- /*  public Servidor(){
+  /* public Servidor(){
        JLabel lblMessage = new JLabel("Verificado");
             txtIP = new JTextField("127.0.0.1");
             txtPorta = new JTextField("12345");
@@ -155,7 +148,7 @@ public class Servidor {
             JOptionPane.showMessageDialog(null, texts);
    
         pnlContent = new JPanel();
-        texto = new JTextArea(10,20);
+        texto = new JTextArea(15,30);
         texto.setEditable(false);
         texto.setBackground(new Color(240,240,240));
         txtMsg = new JTextField(20);
@@ -178,34 +171,19 @@ public class Servidor {
         pnlContent.add(btnSair);
         pnlContent.add(btnSend);
         pnlContent.setBackground(Color.LIGHT_GRAY);
-        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
-        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLUE, Color.BLUE));
+        texto.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.BLACK));
+        txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.BLACK));
         setTitle(txtNome.getText());
         setContentPane(pnlContent);
         setLocationRelativeTo(null);
         setResizable(false);
-        setSize(250, 300);
+        setSize(350, 400);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
             
         }
- 
-        
-        //22/03
-        public void enviarMensagem(String msg) throws IOException{
-            if(msg.equals("Sair")){
-                bfw.write("Desconectado \r\n");
-                texto.append("Desconectado \r\n");
-            }
-            else{
-                bfw.write(msg+"\r\n");
-                texto.append(txtNome.getText()+"diz -> " + txtMsg.getText()+"\r\n");
-            }
-            bfw.flush();
-            txtMsg.setText("");
-        }
-        
+         
         //22/03
         public void escutar() throws IOException{
             
@@ -226,7 +204,7 @@ public class Servidor {
         }
         
         public void sair() throws IOException{
-            enviarMensagem("Sair");
+        //    enviarMensagem("Sair");
             bfw.close();
             ouw.close();
             ou.close();
@@ -240,10 +218,10 @@ public class Servidor {
    
     @Override
     public void actionPerformed(ActionEvent e) {
-    try{
+        try{
             if(e.getActionCommand().equals(btnSend.getActionCommand()))
-                enviarMensagem(txtMsg.getText());
-            else
+            //   enviarMensagem(txtMsg.getText());
+           // else
                 if(e.getActionCommand().equals(btnSair.getActionCommand()))
                     sair();
         } catch (Exception e1) {
@@ -261,7 +239,7 @@ public class Servidor {
     public void keyPressed(KeyEvent e) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER){
             try{
-                enviarMensagem(txtMsg.getText());
+           //     enviarMensagem(txtMsg.getText());
             } catch(Exception e1){
                 //Todo auto-generated catch block
                 e1.printStackTrace();
