@@ -12,6 +12,7 @@
 package cliente;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.*;
 import java.net.*;
@@ -21,7 +22,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
+import javax.swing.text.*;
 import java.lang.Thread;
+import java.lang.reflect.Array;
 
 	
 public class Cliente extends JFrame implements ActionListener, KeyListener{
@@ -30,7 +33,8 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 	private static boolean done = false;
         /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
         private static final long serialVersionUID = 1L;
-        private static JTextArea texto;
+        //private static JTextArea texto;
+        private static JTextPane texto;
         private static JTextField txtMsg;
         private static JButton btnSend;
         private static JButton btnSair;
@@ -44,7 +48,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         private static JTextField txtIP;
         private static JTextField txtPorta;
         private static JTextField txtNome;
-           
+        private String txtAuxiliar;    
                 
        	public static void main(String args[]) throws IOException {
             Cliente app = new Cliente();
@@ -86,7 +90,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 //			loop principal: obtendo uma linha digitada no teclado e
 //			enviando-a para o servidor.
 			String linha;
-			while (true) {
+			/*while (true) {
                             /////////////////////////////////////
 				//System.out.print("> " + meuNome +": ");
                                 System.out.print(meuNome + "-> ");
@@ -96,7 +100,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 				if (done) {break;}
 //				envia para o servidor
 				saida.println(linha);
-			}
+			}*/
 		}
 		catch (IOException e) {
 //			Caso ocorra alguma excessão de E/S, mostre qual foi.
@@ -122,7 +126,10 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             JOptionPane.showMessageDialog(null, texts);
    
         pnlContent = new JPanel();
-        texto = new JTextArea(15,30);
+       // texto = new JTextArea(15,30);
+        texto = new JTextPane();
+        texto.setPreferredSize(new Dimension(330,300));
+        ////////////////////////
         texto.setEditable(false);
         texto.setBackground(new Color(238,233,233));
         txtMsg = new JTextField(30);
@@ -137,7 +144,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         btnSend.addKeyListener(this);
         txtMsg.addKeyListener(this);
         JScrollPane scroll = new JScrollPane(texto);
-        texto.setLineWrap(true);
+      //  texto.setLineWrap(true);
         pnlContent.add(lblHistorico);
         pnlContent.add(scroll);
         pnlContent.add(lblMsg);
@@ -151,12 +158,27 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         setContentPane(pnlContent);
         setLocationRelativeTo(null);
         setResizable(false);
-        setSize(350, 400);
+        //    setSize(350, 400);
+        setSize(350, 440);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
                 
             
         }
+        
+     //metodo para usar o append no jtextpane   
+    private void appendToPane(JTextPane tp, String msge, Color c) {
+    StyleContext sc = StyleContext.getDefaultStyleContext();
+    AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c); //muda a cor
+
+    aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console"); //muda a fonte
+    aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED); //muda o alinhamento do texto
+
+    int len = tp.getDocument().getLength(); //pega o tamanho total do texto
+    tp.setCaretPosition(len); //joga o cursor pro final do texto.
+    tp.setCharacterAttributes(aset, false);
+    tp.replaceSelection(msge); //escreve a mensagem
+}
         //22/03////Trata a conexao do cliente com o servidor
         public void conectar() throws IOException{
             //passa as informações necessarias para socket para realixao a conexao
@@ -164,19 +186,26 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             ou = socket.getOutputStream();
             ouw = new OutputStreamWriter(ou);
             bfw = new BufferedWriter(ouw);
-            bfw.write(txtNome.getText()+"\r\n");
+           // bfw.write(txtNome.getText()+"\r\n");
             bfw.flush();
         }
         
         //22/03
         public void enviarMensagem(String msg) throws IOException{
+             txtAuxiliar = texto.getText();
             if(msg.equals("Sair")){
-                bfw.write("Desconectado \r\n");
-                texto.append("Desconectado \r\n");
+                bfw.write(txtNome.getText() + " -> Desconectado \r\n");
+             //   appendToPane(texto, "Desconectado \r\n", Color.red);
+                texto.setText(txtAuxiliar + "Desconectado \r\n");
+             // texto.append("Desconectado \r\n");
+             txtAuxiliar = texto.getText();
             }
             else{
-                bfw.write(msg+"\r\n");
-                texto.append(txtNome.getText()+" diz -> " + txtMsg.getText()+"\r\n");
+                bfw.write(txtNome.getText()+" -> " + msg +"\r\n");
+             //   appendToPane(texto, txtNome.getText() + " diz -> " + txtMsg.getText() + "\r\n", Color.red);
+                texto.setText(txtAuxiliar+txtNome.getText()+" -> " + txtMsg.getText()+"\r\n");
+                //texto.append(txtNome.getText()+" diz -> " + txtMsg.getText()+"\r\n");
+                txtAuxiliar = texto.getText();
             }
             bfw.flush();
             txtMsg.setText("");
@@ -184,22 +213,40 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         
         //22/03
         public void escutar() throws IOException{
-            
+           
             InputStream in = socket.getInputStream();
             InputStreamReader inr = new InputStreamReader(in);
             BufferedReader bfr = new BufferedReader(inr);
             String msg = "";
             
+            System.out.println(txtAuxiliar);
             while(!"Sair".equalsIgnoreCase(msg))
                 
                 if(bfr.ready()){
                     msg = bfr.readLine();
                     if(msg.equals("Sair"))
-                        texto.append("Servidor caiu! \r\n");
-                    else
+                    //     appendToPane(texto, "Servidor caiu! \r\n", Color.red);
+                       texto.setText(txtAuxiliar + "Servidor caiu! \r\n");
+                     // texto.append("Servidor caiu! \r\n");
+                    else if(msg.equals("<3")){
+                        ImageIcon heart_emoji = new ImageIcon(Cliente.class.getResource("heart_icon.png"));
+                    //    appendToPane(texto, "Servidor diz -> " + heart_emoji, Color.red);
                         
-                        texto.append("Servidor diz -> " + msg+"\r\n");
+                        //texto.append("Servidor diz -> " + heart_emoji);
+                        
+                        JOptionPane.showMessageDialog(
+                                    null,
+                                   "Love",
+                                   "Love", JOptionPane.INFORMATION_MESSAGE,
+                                    heart_emoji);
+                    }
+                    else{
+                    //     appendToPane(texto, "Servidor diz -> " + msg + "\r\n", Color.red);
+                        
+                        texto.setText(txtAuxiliar + msg+"\r\n");
+                    //   texto.append("Servidor diz -> " + msg+"\r\n");
                         //texto.append(msg+"\r\n");
+                }
                 }
         }
         

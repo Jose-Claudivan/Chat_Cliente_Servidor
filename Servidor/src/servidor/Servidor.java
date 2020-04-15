@@ -31,8 +31,8 @@ import java.lang.Thread;
  * @author Claudivan
  */
 //public class Servidor extends Thread implements Runnable  {
-//public class Servidor extends JFrame implements ActionListener, KeyListener{
-public class Servidor {
+public class Servidor extends JFrame implements ActionListener, KeyListener{
+//public class Servidor {
         ///////////////07/04/2020//////////////
     private static boolean done = false;
     
@@ -44,18 +44,21 @@ public class Servidor {
     private JLabel lblHistorico;
     private JLabel lblMsg;
     private JPanel pnlContent;
-    private Socket socket;
+    private Socket conexao;
     private OutputStream ou;
     private Writer ouw;
     private BufferedWriter bfw;
     private JTextField txtIP;
     private JTextField txtPorta;
     private JTextField txtNome;
-    private static JLabel icon;
+    private JLabel icon;
     private BufferedReader bfr;
+    private DataOutputStream outToClient;
+    private BufferedReader inFromUsuario;
     
     
-   public static void main(String args[]) throws IOException {
+    
+   public void inicio() throws IOException {
 		                          
                 String clientSentence;
       
@@ -63,8 +66,7 @@ public class Servidor {
      //			criando um socket que fica escutando a porta 9090		
                         ServerSocket s = new ServerSocket(12345);
                         System.out.println("Porta 12345 aberta!");
-
-			
+                        			
 //			Loop principal.
 			while (true) {
 //				aguarda algum cliente se conectar. A execução do
@@ -73,15 +75,16 @@ public class Servidor {
 //				ao servidor, o método desbloqueia e retorna com um
 //				objeto da classe Socket, que é porta da comunicação.
 				System.out.print("Esperando alguem se conectar...\n");
-				Socket conexao = s.accept();
+				conexao = s.accept();
+                                this.escutar();
                                 
              			//System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
-                                    Servidor app = new Servidor();
-                                    app.enviarMsg(conexao);
+                                    
+                                   // this.enviarMsg();
                                   //  app.conectar();
                                    //  app.escutar();
                                 
-                                 //EMOJI/////                                                                                              if (clientSentence.equals("<3")){
+                                 //EMOJI/////        if (clientSentence.equals("<3")){
                                    /* ImageIcon imagem = new ImageIcon(Servidor.class.getResource("heart_icon.png"));
                                     JOptionPane.showMessageDialog(
                                     null,
@@ -105,41 +108,34 @@ public class Servidor {
  //  public Socket conexao;
    public String clientSentence;
 
-   public void enviarMsg(Socket conexao) throws IOException{
+   public void enviarMsg(String msg) throws IOException{
       
-       Scanner scan = new Scanner(conexao.getInputStream());
-        while(scan.hasNextLine()){
-              System.out.println(scan.nextLine());
+       //Scanner scan = new Scanner(conexao.getInputStream());
+       // while(scan.hasNextLine()){
+             // System.out.println(scan.nextLine());
        //Ler a mensagem do cliente para o servidor
-          BufferedReader inFromUsuario = new BufferedReader(
-             new InputStreamReader(System.in));
+       //    inFromUsuario = new BufferedReader(
+           //  new InputStreamReader(System.in));
      
       //define as mensagem para um odjeto de saida
-         DataOutputStream outToClient = new DataOutputStream(
+          outToClient = new DataOutputStream(
              conexao.getOutputStream());
-         clientSentence = inFromUsuario.readLine();
+         
+       //  clientSentence = inFromUsuario.readLine();
          //imprime mensagem do cliente no servidor
-         outToClient.writeBytes(clientSentence + "\n");
-              System.out.print("Cliente -> ");
-             
-       }
+         outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
+         
+         texto.append(txtNome.getText()+" -> " + msg +"\r\n");
+         
+         txtMsg.setText("");
+      
+      // }
     
    }
 
-        //22/03
-     /*   public void conectar() throws IOException{
-            //System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
-            
-            socket = new Socket(txtIP.getText(),Integer.parseInt(txtPorta.getText()));
-            ou = socket.getOutputStream();
-            ouw = new OutputStreamWriter(ou);
-            bfw = new BufferedWriter(ouw);
-            bfw.write(txtNome.getText()+"\r\n");
-            bfw.flush();
-        }*/
    
    ////07-04-2020/////////
-  /* public Servidor(){
+   public Servidor(){
        JLabel lblMessage = new JLabel("Verificado");
             txtIP = new JTextField("127.0.0.1");
             txtPorta = new JTextField("12345");
@@ -186,29 +182,23 @@ public class Servidor {
          
         //22/03
         public void escutar() throws IOException{
-            
-            InputStream in = socket.getInputStream();
-            InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader bfr = new BufferedReader(inr);
-            String msg = "";
-            
-            while(!"Sair".equalsIgnoreCase(msg))
-                
-                if(bfr.ready()){
-                    msg = bfr.readLine();
-                    if(msg.equals("Sair"))
-                        texto.append("Servidor caiu! \r\n");
-                    else
-                        texto.append(msg+"\r\n");
-                }
+            Scanner scan = new Scanner(conexao.getInputStream());
+                while(scan.hasNextLine()){
+                    texto.append(scan.nextLine()+"\n");
+                    }
         }
         
         public void sair() throws IOException{
-        //    enviarMensagem("Sair");
-            bfw.close();
-            ouw.close();
-            ou.close();
-            socket.close();
+             /*if(outToClient != null){
+                 outToClient.close();
+             }
+            if(inFromUsuario != null){
+                inFromUsuario.close();
+            }*/
+            enviarMsg("Desconectado");
+            conexao.close();
+            
+            System.out.println("Servidor desconectado");
         }
 
    
@@ -219,10 +209,15 @@ public class Servidor {
     @Override
     public void actionPerformed(ActionEvent e) {
         try{
-            if(e.getActionCommand().equals(btnSend.getActionCommand()))
-            //   enviarMensagem(txtMsg.getText());
-           // else
-                if(e.getActionCommand().equals(btnSair.getActionCommand()))
+          if(e.getActionCommand().equals(btnSend.getActionCommand())){
+              enviarMsg(txtMsg.getText());
+            
+          }
+                
+            
+            else
+               if(e.getActionCommand().equals(btnSair.getActionCommand()))
+              
                     sair();
         } catch (Exception e1) {
             //Todo auto-generated catch block
@@ -239,8 +234,9 @@ public class Servidor {
     public void keyPressed(KeyEvent e) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER){
             try{
-           //     enviarMensagem(txtMsg.getText());
-            } catch(Exception e1){
+                enviarMsg(txtMsg.getText());
+                
+                  } catch(Exception e1){
                 //Todo auto-generated catch block
                 e1.printStackTrace();
             }
@@ -251,6 +247,6 @@ public class Servidor {
     @Override
     public void keyReleased(KeyEvent e) {
         //todo auto-generated method block
-    }*/
+    }
 
 }
