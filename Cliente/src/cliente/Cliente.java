@@ -36,10 +36,9 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 //public class Cliente{
 //	Flag que indica quando se deve terminar a execução.
 	private static boolean done = false;
-        /*xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx*/
         private static final long serialVersionUID = 1L;
         //private static JTextArea texto;
-        private  JTextPane texto;
+        private  JEditorPane texto;
         private  JTextField txtMsg;
         private  JButton btnSend;
         private  JButton btnSair;
@@ -129,24 +128,13 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             txtNome = new JTextField("Cliente");
             Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
             JOptionPane.showMessageDialog(null, texts);
-   
+    
+    
         pnlContent = new JPanel();
        // texto = new JTextArea(15,30);
-        texto = new JTextPane();
+        texto = new JEditorPane();
         texto.setPreferredSize(new Dimension(330,300));
-       /* texto.setContentType("text/html");
-       texto.setEditable(false);
-       HTMLDocument doc = (HTMLDocument)texto.getDocument();
-       HTMLEditorKit editorKit = (HTMLEditorKit)texto.getEditorKit();
-       String text = "<a href=\"abc\">C:\\Users\\Juciana\\Documents\\NetBeansProjects\\Cliente\\src\\cliente\\heart_icon.png</a>";   
-            try {
-                editorKit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
-            } catch (BadLocationException ex) {
-                Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-                            
-                             
-        
+        //texto.setContentType("text/html");
         texto.setEditable(false);
         texto.setBackground(new Color(238,233,233));
         txtMsg = new JTextField(23);
@@ -241,38 +229,34 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             
             txtAuxiliar = texto.getText();
             System.out.println(txtAuxiliar + "4");
-            while(!"Sair".equalsIgnoreCase(msg))
-                
+            while(!"Sair".equalsIgnoreCase(msg)){
+              
                 if(bfr.ready()){
                     msg = bfr.readLine();
+                  
                     if(msg.equals("Sair")){
                     //     appendToPane(texto, "Servidor caiu! \r\n", Color.red);
                        texto.setText(txtAuxiliar + "Servidor caiu! \r\n");
                        System.out.println(txtAuxiliar + "6");
                        txtAuxiliar = texto.getText();
                      // texto.append("Servidor caiu! \r\n");
-                   // else if(msg.equals("<3")){
-                      //  ImageIcon heart_emoji = new ImageIcon(Cliente.class.getResource("heart_icon.png"));
-                    //    appendToPane(texto, "Servidor diz -> " + heart_emoji, Color.red);
-                        
-                        //texto.append("Servidor diz -> " + heart_emoji);
-                        
-                      //  JOptionPane.showMessageDialog(
-                        //            null,
-                         //          "Love",
-                        //           "Love", JOptionPane.INFORMATION_MESSAGE,
-                         //           heart_emoji);
                     }
-                    else{
-                    //     appendToPane(texto, "Servidor diz -> " + msg + "\r\n", Color.red);
-                        
-                        texto.setText(txtAuxiliar + msg+"\r\n");
-                        System.out.println(txtAuxiliar + "5");
-                    //   texto.append("Servidor diz -> " + msg+"\r\n");
-                        //texto.append(msg+"\r\n");
+                    else if(msg.equals("<3")){
                         txtAuxiliar = texto.getText();
+                        texto.setText(txtAuxiliar + "CORAÇÂO");
+                        // texto.setContentType("text/html");
+                       // texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\heart_icon.png\"/></html>");
+                    }
+                    
+                    else {
+                        txtAuxiliar = texto.getText();
+                        texto.setText(txtAuxiliar + msg + "\r\n");
+                        
+                    }
+                         
+                    
                 }
-                }
+            }
         }
         
         public void sair() throws IOException{
