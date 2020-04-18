@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class Main {
     public static void main(String args[]){
         Servidor servidor = new Servidor();
+        
         try {
             servidor.inicio();
         } catch (IOException ex) {

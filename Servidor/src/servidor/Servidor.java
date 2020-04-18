@@ -41,6 +41,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
     private JTextField txtMsg;
     private JButton btnSend;
     private JButton btnSair;
+    private JButton btnAtencao;
     private JLabel lblHistorico;
     private JLabel lblMsg;
     private JPanel pnlContent;
@@ -75,7 +76,8 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
 //				ao servidor, o método desbloqueia e retorna com um
 //				objeto da classe Socket, que é porta da comunicação.
 				System.out.print("Esperando alguem se conectar...\n");
-				conexao = s.accept();
+                                conexao = s.accept();
+                                
                                 this.escutar();
                                 
              			//System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
@@ -154,8 +156,11 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
         btnSend.setToolTipText("Enviar mensagem");
         btnSair = new JButton("Sair");
         btnSair.setToolTipText("Sair do Chat");
+        btnAtencao = new JButton("Psiu!");
+        btnAtencao.setToolTipText("Chamar atenção");
         btnSend.addActionListener(this);
         btnSair.addActionListener(this);
+        btnAtencao.addActionListener(this);
         btnSend.addKeyListener(this);
         txtMsg.addKeyListener(this);
         JScrollPane scroll = new JScrollPane(texto);
@@ -166,6 +171,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
         pnlContent.add(txtMsg);
         pnlContent.add(btnSair);
         pnlContent.add(btnSend);
+        pnlContent.add(btnAtencao);
         pnlContent.setBackground(Color.LIGHT_GRAY);
         texto.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.BLACK));
         txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.BLACK, Color.BLACK));
@@ -201,7 +207,11 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
             System.out.println("Servidor desconectado");
         }
 
-   
+        public void atencao() throws IOException{
+        
+         JOptionPane.showMessageDialog(null, "Ei " +  txtNome.getText() + " você me deixou no vacuo!\n ME RESPONDE INFELIZ!");
+            
+        }
    
    
        
@@ -215,10 +225,16 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
           }
                 
             
-            else
-               if(e.getActionCommand().equals(btnSair.getActionCommand()))
+          else
+               if(e.getActionCommand().equals(btnSair.getActionCommand())){
               
                     sair();
+          }
+          
+          else if(e.getActionCommand().equals(btnAtencao.getActionCommand())){
+                   atencao();
+          }
+          
         } catch (Exception e1) {
             //Todo auto-generated catch block
             e1.printStackTrace();

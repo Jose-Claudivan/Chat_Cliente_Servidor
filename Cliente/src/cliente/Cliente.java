@@ -38,20 +38,21 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 	private static boolean done = false;
         private static final long serialVersionUID = 1L;
         //private static JTextArea texto;
-        private  JEditorPane texto;
-        private  JTextField txtMsg;
-        private  JButton btnSend;
-        private  JButton btnSair;
-        private  JLabel lblHistorico;
-        private  JLabel lblMsg;
-        private  JPanel pnlContent;
+        private JEditorPane texto;
+        private JTextField txtMsg;
+        private JButton btnSend;
+        private JButton btnSair;
+        private JButton btnAtencao;
+        private JLabel lblHistorico;
+        private JLabel lblMsg;
+        private JPanel pnlContent;
         private Socket socket;
         private OutputStream ou;
         private Writer ouw;
         private BufferedWriter bfw;
-        private  JTextField txtIP;
-        private  JTextField txtPorta;
-        private  JTextField txtNome;
+        private JTextField txtIP;
+        private JTextField txtPorta;
+        private JTextField txtNome;
         private String txtAuxiliar;    
                 
        	public static void main(String args[]) throws IOException {
@@ -109,8 +110,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
 		catch (IOException e) {
 //			Caso ocorra alguma excessão de E/S, mostre qual foi.
 			System.out.println("IOException: " + e);
-            System.out.println("ERRO DE ENTRADA/SAIDA NO CLIENTE");
-		}
+                }
 	}
 //	parte que controla a recepção de mensagens deste cliente
 	private Socket conexao;
@@ -144,8 +144,11 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         btnSend.setToolTipText("Enviar mensagem");
         btnSair = new JButton("Sair");
         btnSair.setToolTipText("Sair do Chat");
+        btnAtencao = new JButton("Psiu!");
+        btnAtencao.setToolTipText("Chamar atenção");
         btnSend.addActionListener(this);
         btnSair.addActionListener(this);
+        btnAtencao.addActionListener(this);
         btnSend.addKeyListener(this);
         txtMsg.addKeyListener(this);
         JScrollPane scroll = new JScrollPane(texto);
@@ -156,6 +159,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         pnlContent.add(txtMsg);
         pnlContent.add(btnSair);
         pnlContent.add(btnSend);
+        pnlContent.add(btnAtencao);
         pnlContent.setBackground(Color.LIGHT_GRAY);
         texto.setBorder(BorderFactory.createEtchedBorder(Color.GREEN, Color.GREEN));
         txtMsg.setBorder(BorderFactory.createEtchedBorder(Color.GREEN, Color.GREEN));
@@ -193,6 +197,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             bfw = new BufferedWriter(ouw);
            // bfw.write(txtNome.getText()+"\r\n");
             bfw.flush();
+            
         }
         
         //22/03
@@ -266,6 +271,12 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             ou.close();
             socket.close();
         }
+        
+        public void atencao() throws IOException{
+           // System.out.println("ATENCAO");
+            JOptionPane.showMessageDialog(null, "Ei " +  txtNome.getText() + " você me deixou no vacuo!\n ME RESPONDE INFELIZ!");
+            
+        }
 
 
     private class RunnableImpl implements Runnable { 
@@ -313,11 +324,17 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         try{
-            if(e.getActionCommand().equals(btnSend.getActionCommand()))
+            if(e.getActionCommand().equals(btnSend.getActionCommand())){
                 enviarMensagem(txtMsg.getText());
+            }
+            
             else
-                if(e.getActionCommand().equals(btnSair.getActionCommand()))
+                if(e.getActionCommand().equals(btnSair.getActionCommand())){
                     sair();
+                }
+                else if(e.getActionCommand().equals(btnAtencao.getActionCommand())){
+                    atencao();
+                }
         } catch (Exception e1) {
             //Todo auto-generated catch block
             e1.printStackTrace();
