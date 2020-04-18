@@ -20,7 +20,7 @@ public class Main {
         Servidor servidor = new Servidor();
         
         try {
-            servidor.inicio();
+            servidor.iniciar();
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

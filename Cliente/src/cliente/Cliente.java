@@ -175,19 +175,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
             
         }
         
-     //metodo para usar o append no jtextpane   
-    private void appendToPane(JTextPane tp, String msge, Color c) {
-    StyleContext sc = StyleContext.getDefaultStyleContext();
-    AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c); //muda a cor
 
-    aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Lucida Console"); //muda a fonte
-    aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED); //muda o alinhamento do texto
-
-    int len = tp.getDocument().getLength(); //pega o tamanho total do texto
-    tp.setCaretPosition(len); //joga o cursor pro final do texto.
-    tp.setCharacterAttributes(aset, false);
-    tp.replaceSelection(msge); //escreve a mensagem
-}
         //22/03////Trata a conexao do cliente com o servidor
         public void conectar() throws IOException{
             //passa as informações necessarias para socket para realixao a conexao
@@ -225,43 +213,17 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         }
         
         //22/03
-        public void escutar() throws IOException{
-           
-            InputStream in = socket.getInputStream();
-            InputStreamReader inr = new InputStreamReader(in);
-            BufferedReader bfr = new BufferedReader(inr);
-            String msg = "";
+      public void escutar() throws IOException{
+            Scanner scan = new Scanner(socket.getInputStream());
             
             txtAuxiliar = texto.getText();
-            System.out.println(txtAuxiliar + "4");
-            while(!"Sair".equalsIgnoreCase(msg)){
-              
-                if(bfr.ready()){
-                    msg = bfr.readLine();
+                while(scan.hasNextLine()){
+                    //texto.append(scan.nextLine()+"\n");
+                    
+                    texto.setText(txtAuxiliar + scan.nextLine() + "\r\n");
                   
-                    if(msg.equals("Sair")){
-                    //     appendToPane(texto, "Servidor caiu! \r\n", Color.red);
-                       texto.setText(txtAuxiliar + "Servidor caiu! \r\n");
-                       System.out.println(txtAuxiliar + "6");
-                       txtAuxiliar = texto.getText();
-                     // texto.append("Servidor caiu! \r\n");
+                    txtAuxiliar = texto.getText();
                     }
-                    else if(msg.equals("<3")){
-                        txtAuxiliar = texto.getText();
-                        texto.setText(txtAuxiliar + "CORAÇÂO");
-                        // texto.setContentType("text/html");
-                       // texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\heart_icon.png\"/></html>");
-                    }
-                    
-                    else {
-                        txtAuxiliar = texto.getText();
-                        texto.setText(txtAuxiliar + msg + "\r\n");
-                        
-                    }
-                         
-                    
-                }
-            }
         }
         
         public void sair() throws IOException{

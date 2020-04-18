@@ -56,10 +56,11 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
     private BufferedReader bfr;
     private DataOutputStream outToClient;
     private BufferedReader inFromUsuario;
+    private String nomeServidor;
     
     
     
-   public void inicio() throws IOException {
+   public void iniciar() throws IOException {
 		                          
                 String clientSentence;
       
@@ -70,42 +71,28 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
                         			
 //			Loop principal.
 			while (true) {
-//				aguarda algum cliente se conectar. A execução do
-//				servidor fica bloqueada na chamada do método accept da
-//				classe ServerSocket. Quando algum cliente se conectar
-//				ao servidor, o método desbloqueia e retorna com um
-//				objeto da classe Socket, que é porta da comunicação.
-				System.out.print("Esperando alguem se conectar...\n");
-                                conexao = s.accept();
+                            
+//                          aguarda algum cliente se conectar. A execução do
+//                          servidor fica bloqueada na chamada do método accept da
+//                          classe ServerSocket. Quando algum cliente se conectar
+//                          ao servidor, o método desbloqueia e retorna com um
+//                          objeto da classe Socket, que é porta da comunicação.
+                            System.out.print("Esperando alguem se conectar...\n");
+                            conexao = s.accept();
                                 
-                                this.escutar();
-                                
-             			//System.out.println(conexao.getInetAddress().getHostAddress()+" Se conectou!");
-                                    
-                                   // this.enviarMsg();
-                                  //  app.conectar();
-                                   //  app.escutar();
-                                
-                                 //EMOJI/////        if (clientSentence.equals("<3")){
-                                   /* ImageIcon imagem = new ImageIcon(Servidor.class.getResource("heart_icon.png"));
-                                    JOptionPane.showMessageDialog(
-                                    null,
-                                   "Love",
-                                   "Love", JOptionPane.INFORMATION_MESSAGE,
-                                    imagem);
-                                        
-                                    }*/
-                                   
-                                }
-                               
-		  	}
-		//}
-	  	catch (IOException e) {
-//			caso ocorra alguma excessão de E/S, mostre qual foi.
-		  	System.out.println("IOException: " + e);
-		  }
+                            this.escutar();
 
-	  }
+                                   
+                        }
+                               
+		}
+	
+	  	catch (IOException e) {
+//                  caso ocorra alguma excessão de E/S, mostre qual foi.
+                    System.out.println("IOException: " + e);
+		}
+
+    }
    
  //  public Socket conexao;
    public String clientSentence;
@@ -124,13 +111,20 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
              conexao.getOutputStream());
          
        //  clientSentence = inFromUsuario.readLine();
-         //imprime mensagem do cliente no servidor
-         outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
+         //imprime mensagem do servidor no cliente
          
-         texto.append(txtNome.getText()+" -> " + msg +"\r\n");
+         outToClient.writeBytes(txtNome.getText());
+         outToClient.writeBytes(" -> ");
+         outToClient.writeBytes(msg);
+         outToClient.writeBytes("\n");
+        // outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
          
+         //texto.append(txtNome.getText()+" -> " + msg +"\r\n");
+         texto.append(txtNome.getText());
+         texto.append(" -> " + msg + "\r\n");
+         //limpa o campo de digitar mensagem, apos mensagem ser enviada
          txtMsg.setText("");
-      
+         System.out.println(txtNome.getText());
       // }
     
    }
@@ -144,7 +138,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
             txtNome = new JTextField("Servidor");
             Object[] texts = {lblMessage, txtIP, txtPorta, txtNome};
             JOptionPane.showMessageDialog(null, texts);
-   
+     
         pnlContent = new JPanel();
         texto = new JTextArea(15,30);
         texto.setEditable(false);
