@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import java.io.File;
+import java.nio.file.Paths;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,6 +27,11 @@ public class Main {
         } catch (IOException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    //System.out.print("<p>"+System.getProperty("user.dir")+"<\\p>");
+        
+        /*try{
+        System.out.println(Paths.get("images").toAbsolutePath().toString());
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }*/
+    }    
 }

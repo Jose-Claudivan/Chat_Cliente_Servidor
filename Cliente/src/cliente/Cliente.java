@@ -240,10 +240,9 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
                     else if(msg.equals("<3")){
                         
                         String path = PathUtil.getImagePath("heart_icon.png");
-                        System.out.print(path);
                      //   texto.setText("Servidor -> CORAÇÂO");
                         texto.setContentType("text/html");
-                        texto.setText("<img src="+path+"/></html>");
+                        texto.setText("<img src="+path+"/>");
                         
                         
                     }
