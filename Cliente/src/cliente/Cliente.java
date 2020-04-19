@@ -22,6 +22,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
+import java.io.File;
 import javax.swing.text.*;
 import java.lang.Thread;
 import java.lang.reflect.Array;
@@ -237,11 +238,12 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
                     }
                     //condição para exibir o emoji do coraçao
                     else if(msg.equals("<3")){
-                        txtAuxiliar = texto.getText();
-                      
+                        
+                        String path = PathUtil.getImagePath("heart_icon.png");
+                        System.out.print(path);
                      //   texto.setText("Servidor -> CORAÇÂO");
-                         texto.setContentType("text/html");
-                        texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\heart_icon.png\"/></html>");
+                        texto.setContentType("text/html");
+                        texto.setText("<img src="+path+"/></html>");
                         
                         
                     }
