@@ -213,17 +213,63 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
         }
         
         //22/03
-      public void escutar() throws IOException{
-            Scanner scan = new Scanner(socket.getInputStream());
+  public void escutar() throws IOException{
+           
+            InputStream in = socket.getInputStream();
+            InputStreamReader inr = new InputStreamReader(in);
+            BufferedReader bfr = new BufferedReader(inr);
+            String msg = "";
             
             txtAuxiliar = texto.getText();
-                while(scan.hasNextLine()){
-                    //texto.append(scan.nextLine()+"\n");
-                    
-                    texto.setText(txtAuxiliar + scan.nextLine() + "\r\n");
+            System.out.println(txtAuxiliar + "4");
+            while(!"Sair".equalsIgnoreCase(msg)){
+              
+                if(bfr.ready()){
+                    msg = bfr.readLine();
                   
-                    txtAuxiliar = texto.getText();
+                    if(msg.equals("Sair")){
+                    //     appendToPane(texto, "Servidor caiu! \r\n", Color.red);
+                    
+                       texto.setText(txtAuxiliar + "Servidor caiu! \r\n");
+                       System.out.println(txtAuxiliar + "5");
+                       txtAuxiliar = texto.getText();
+                     // texto.append("Servidor caiu! \r\n");
                     }
+                    //condição para exibir o emoji do coraçao
+                    else if(msg.equals("<3")){
+                        txtAuxiliar = texto.getText();
+                      
+                     //   texto.setText("Servidor -> CORAÇÂO");
+                         texto.setContentType("text/html");
+                        texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\heart_icon.png\"/></html>");
+                        
+                        
+                    }
+                    //condição para exibir o emoji do sorriso
+                  /*  else if (msg.equals(":)")){
+                        texto.setContentType("text/html");
+                        texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\smile_icon.png\"/></html>");
+                    }
+                    //condição para exibir o emoji do choro
+                    else if (msg.equals(":(")){
+                        texto.setContentType("text/html");
+                        texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\crying_icon.png\"/></html>");
+                    }
+                    //condiçao para exibir o emoji do blz
+                    else if (msg.equals("(y)")){
+                        texto.setContentType("text/html");
+                        texto.setText("<html><img src=\"file:C:\\\\Users\\\\Juciana\\\\Documents\\\\NetBeansProjects\\\\Cliente\\\\src\\\\cliente\\\\like_icon.png\"/></html>");
+                    }*/
+                  
+                    
+                    else {
+                       texto.setContentType("text");
+                        //texto.setText("Servidor -> " + msg + "\r\n");
+                        texto.setText(txtAuxiliar + msg + "\r\n");
+                         txtAuxiliar = texto.getText();
+                    } 
+                }
+            }
         }
         
         public void sair() throws IOException{

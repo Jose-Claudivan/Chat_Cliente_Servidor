@@ -113,8 +113,8 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
        //  clientSentence = inFromUsuario.readLine();
          //imprime mensagem do servidor no cliente
          
-         outToClient.writeBytes(txtNome.getText());
-         outToClient.writeBytes(" -> ");
+        // outToClient.writeBytes(txtNome.getText());
+        // outToClient.writeBytes(" -> ");
          outToClient.writeBytes(msg);
          outToClient.writeBytes("\n");
         // outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
