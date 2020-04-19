@@ -2,21 +2,18 @@ package cliente;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 public class PathUtil {
 
     public static String getImagePath(String fileName) {
         
-        File file = new File("images/"+fileName);
         String path ="";
 
-        try{
-            path = file.getCanonicalPath();
-            path="file:"+path;
-        }catch(IOException ex){
-          ex.printStackTrace();
-        }
-
+        path = Paths.get("images/"+fileName).toAbsolutePath().toString();
+        path="file:"+path;
+        System.out.print(path);
+       
         return path;
     }
 }
