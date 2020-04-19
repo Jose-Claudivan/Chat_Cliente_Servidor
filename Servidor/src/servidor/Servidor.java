@@ -11,8 +11,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 package servidor;
 
-
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.io.*;
 import java.net.*;
@@ -37,7 +37,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
     private static boolean done = false;
     
     private static final long serialVersionUID = 1L;
-    private JTextArea texto;
+    private JEditorPane texto;
     private JTextField txtMsg;
     private JButton btnSend;
     private JButton btnSair;
@@ -57,6 +57,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
     private DataOutputStream outToClient;
     private BufferedReader inFromUsuario;
     private String nomeServidor;
+    ManagerMessages mm;
     
     
     
@@ -112,16 +113,18 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
          
        //  clientSentence = inFromUsuario.readLine();
          //imprime mensagem do servidor no cliente
-         
+         //formata a mensagem a ser enviada (nome;horário;mensagem)
+         String text = mm.formatMessage(this.txtNome.getText(),msg);
         // outToClient.writeBytes(txtNome.getText());
         // outToClient.writeBytes(" -> ");
-         outToClient.writeBytes(msg);
-         outToClient.writeBytes("\n");
+         outToClient.writeBytes(text);
+         texto.setText(mm.insert(text));
+         //outToClient.writeBytes("\n");
         // outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
          
          //texto.append(txtNome.getText()+" -> " + msg +"\r\n");
-         texto.append(txtNome.getText());
-         texto.append(" -> " + msg + "\r\n");
+         //texto.append(txtNome.getText());
+         //texto.append(" -> " + msg + "\r\n");
          //limpa o campo de digitar mensagem, apos mensagem ser enviada
          txtMsg.setText("");
          System.out.println(txtNome.getText());
@@ -132,6 +135,8 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
    
    ////07-04-2020/////////
    public Servidor(){
+        this.mm = new ManagerMessages();
+
        JLabel lblMessage = new JLabel("Verificado");
             txtIP = new JTextField("127.0.0.1");
             txtPorta = new JTextField("12345");
@@ -140,9 +145,17 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
             JOptionPane.showMessageDialog(null, texts);
      
         pnlContent = new JPanel();
-        texto = new JTextArea(15,30);
+
+        texto = new JEditorPane();
+        texto.setContentType("text/html");
+        
+        texto.setPreferredSize(new Dimension(330, 250));
+       // texto = new JTextArea(15,30);
         texto.setEditable(false);
         texto.setBackground(new Color(240,240,240));
+        
+        
+
         txtMsg = new JTextField(20);
         lblHistorico = new JLabel("Histórico");
         lblMsg = new JLabel("Mensagem");
@@ -158,7 +171,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
         btnSend.addKeyListener(this);
         txtMsg.addKeyListener(this);
         JScrollPane scroll = new JScrollPane(texto);
-        texto.setLineWrap(true);
+        //texto.setLineWrap(true);
         pnlContent.add(lblHistorico);
         pnlContent.add(scroll);
         pnlContent.add(lblMsg);
@@ -184,7 +197,8 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
         public void escutar() throws IOException{
             Scanner scan = new Scanner(conexao.getInputStream());
                 while(scan.hasNextLine()){
-                    texto.append(scan.nextLine()+"\n");
+                    texto.setText(mm.insert(scan.nextLine()));
+                    //texto.append(scan.nextLine()+"\n");
                     }
         }
         

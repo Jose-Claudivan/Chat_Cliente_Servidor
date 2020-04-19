@@ -1,4 +1,4 @@
-package cliente;
+package servidor;
 
 import java.io.File;
 
