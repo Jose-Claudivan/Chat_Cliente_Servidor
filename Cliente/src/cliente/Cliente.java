@@ -239,7 +239,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener{
                     //condição para exibir o emoji do coraçao
                     else if(msg.equals("<3")){
                         
-                        String path = PathUtil.getImagePath("heart_icon.png");
+                        String path = "file:images/heart_icon.png";
                      //   texto.setText("Servidor -> CORAÇÂO");
                         texto.setContentType("text/html");
                         texto.setText("<img src="+path+"/>");
