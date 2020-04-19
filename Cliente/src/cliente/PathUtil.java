@@ -6,8 +6,8 @@ import java.io.IOException;
 public class PathUtil {
 
     public static String getImagePath(String fileName) {
-        
-        File file = new File("images/"+fileName);
+        String base = System.getProperty("user.dir");
+        File file = new File(base+"/images/"+fileName);
         String path ="";
 
         try{
