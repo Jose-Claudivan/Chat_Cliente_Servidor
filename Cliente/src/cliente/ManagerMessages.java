@@ -12,7 +12,7 @@ public class ManagerMessages {
         
        String[] str =  msg.split(";",3);
 
-       String title = "<p>"+str[0]+" ("+str[1]+"):"+"</p>";
+       String title = "<span>"+str[0]+" ("+str[1]+"):"+"</span><br>";
 
        //condição para exibir o emoji do coraçao
        if(str[2].equals("<3")){
@@ -20,9 +20,9 @@ public class ManagerMessages {
         String pathSeparator = File.separator;
         String path = "file:images"+pathSeparator+"heart_icon.png";
         
-        body = "<p><img src="+path+"/><\\p>";   
+        body = "<img src="+path+"/><br>";   
     }else{
-        body = "<p>"+str[2]+"</p>";
+        body = "<span>"+str[2]+"</span><br>";
     }
 
 

@@ -117,7 +117,7 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
          String text = mm.formatMessage(this.txtNome.getText(),msg);
         // outToClient.writeBytes(txtNome.getText());
         // outToClient.writeBytes(" -> ");
-         outToClient.writeBytes(text);
+         outToClient.writeBytes(text+"\r\n");
          texto.setText(mm.insert(text));
          //outToClient.writeBytes("\n");
         // outToClient.writeBytes(txtNome.getText()+" -> " + msg + "\n");
@@ -198,7 +198,6 @@ public class Servidor extends JFrame implements ActionListener, KeyListener{
             Scanner scan = new Scanner(conexao.getInputStream());
                 while(scan.hasNextLine()){
                     texto.setText(mm.insert(scan.nextLine()));
-                    //texto.append(scan.nextLine()+"\n");
                     }
         }
         

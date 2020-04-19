@@ -182,14 +182,6 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
 
     }
 
-    private String formatMessage() {
-
-        String msg = this.txtNome.getText() + ";" + TimeUtil.getTime() + ";" + txtMsg.getText();
-
-        return msg;
-    }
-
-
         private void send(String msg) {
             try {
     
@@ -197,7 +189,7 @@ public class Cliente extends JFrame implements ActionListener, KeyListener {
                 String text = mm.formatMessage(this.txtNome.getText(),msg);
                 
                 //envia a mensagem para o servidor
-                bfw.write(text);
+                bfw.write(text+"\r\n");
     
                 //insere a mensagem na tela atual
                 texto.setText(mm.insert(text));
